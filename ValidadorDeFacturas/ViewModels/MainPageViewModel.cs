@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ValidadorDeFacturas.Data;
 using Xamarin.Forms;
 
 namespace ValidadorDeFacturas.ViewModels
 {
     public class MainPageViewModel : BaseViewModel
     {
+        private ConsultaCFDIManager _manager;
         private bool _isBusy;
 
         public bool IsBusy
@@ -23,6 +25,7 @@ namespace ValidadorDeFacturas.ViewModels
 
         public MainPageViewModel()
         {
+            _manager = new ConsultaCFDIManager();
             OnValidarCommand = new Command(async () => await ValidarAsync(), () => !IsBusy);
         }
 
@@ -39,7 +42,11 @@ namespace ValidadorDeFacturas.ViewModels
             {
                 IsBusy = true;
 
-                Console.WriteLine("Comando bindeado");
+                var expresionimpresa = $"?re=test&rr=test&tt=test&id=test";
+
+                var result = await _manager.ConsultaAsync(expresionimpresa);
+
+                await Application.Current.MainPage.DisplayAlert(result.CodigoEstatus, result.Estado, "OK");
             }
             catch (Exception ex)
             {
