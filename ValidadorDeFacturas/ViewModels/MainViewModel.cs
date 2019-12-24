@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace ValidadorDeFacturas.ViewModels
 {
-    public class MainPageViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel
     {
         private ConsultaCFDIManager _manager;
         private bool _isBusy;
@@ -23,7 +23,7 @@ namespace ValidadorDeFacturas.ViewModels
 
         public Command OnValidarCommand { get; private set; }
 
-        public MainPageViewModel()
+        public MainViewModel()
         {
             _manager = new ConsultaCFDIManager();
             OnValidarCommand = new Command(async () => await ValidarAsync(), () => !IsBusy);

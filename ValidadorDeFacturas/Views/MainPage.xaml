@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="ValidadorDeFacturas.Views.MainPage">
     <ContentPage.BindingContext>
-        <viewModels:MainPageViewModel />
+        <viewModels:MainViewModel />
     </ContentPage.BindingContext>
     <StackLayout>
         <!-- Place new controls here -->
