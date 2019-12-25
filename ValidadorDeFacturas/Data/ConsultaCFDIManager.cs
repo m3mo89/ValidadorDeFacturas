@@ -22,7 +22,7 @@ namespace ValidadorDeFacturas.Data
             {
                 using (var context = new OperationContextScope(client.InnerChannel))
                 {
-                    tcs.TrySetResult(await client.ConsultaAsync(expresionImpresa));
+                    tcs.TrySetResult(client.Consulta(expresionImpresa));
                 }
             }
 

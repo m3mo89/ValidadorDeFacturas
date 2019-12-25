@@ -87,6 +87,9 @@ public interface IConsultaCFDIService
 {
 
     [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IConsultaCFDIService/Consulta", ReplyAction = "http://tempuri.org/IConsultaCFDIService/ConsultaResponse")]
+    Sat.Cfdi.Negocio.ConsultaCfdi.Servicio.Acuse Consulta(string expresionImpresa);
+
+    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IConsultaCFDIService/Consulta", ReplyAction = "http://tempuri.org/IConsultaCFDIService/ConsultaResponse")]
     System.Threading.Tasks.Task<Sat.Cfdi.Negocio.ConsultaCfdi.Servicio.Acuse> ConsultaAsync(string expresionImpresa);
 }
 
@@ -138,6 +141,11 @@ public partial class ConsultaCFDIServiceClient : System.ServiceModel.ClientBase<
     public ConsultaCFDIServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
             base(binding, remoteAddress)
     {
+    }
+
+    public Sat.Cfdi.Negocio.ConsultaCfdi.Servicio.Acuse Consulta(string expresionImpresa)
+    {
+        return base.Channel.Consulta(expresionImpresa);
     }
 
     public System.Threading.Tasks.Task<Sat.Cfdi.Negocio.ConsultaCfdi.Servicio.Acuse> ConsultaAsync(string expresionImpresa)
