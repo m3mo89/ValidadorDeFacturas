@@ -7,6 +7,7 @@ namespace ValidadorDeFacturas.Data
 {
     public class ConsultaCFDIManager
     {
+        private TaskCompletionSource<Acuse> _tcs;
         private const string Url = "https://consultaqr.facturaelectronica.sat.gob.mx/ConsultaCFDIService.svc";
 
         private ConsultaCFDIServiceClient GetClient()
@@ -16,17 +17,33 @@ namespace ValidadorDeFacturas.Data
 
         public async Task<Acuse> ConsultaAsync(string expresionImpresa)
         {
-            TaskCompletionSource<Acuse> tcs = new TaskCompletionSource<Acuse>();
+            _tcs = new TaskCompletionSource<Acuse>();
 
-            using (ConsultaCFDIServiceClient client = GetClient())
+            ConsultaCFDIServiceClient client = GetClient();
+            
+            using (var context = new OperationContextScope(client.InnerChannel))
             {
-                using (var context = new OperationContextScope(client.InnerChannel))
-                {
-                    tcs.TrySetResult(client.Consulta(expresionImpresa));
-                }
+                client.ConsultaCompleted += OnConsultaCompleted;
+                client.ConsultaAsync(expresionImpresa);
             }
 
-            return await tcs.Task;
+            return await _tcs.Task;
+        }
+
+        private void OnConsultaCompleted(object s, ConsultaCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                _tcs.SetCanceled();
+            }
+            else if (e.Error != null)
+            {
+                _tcs.SetException(e.Error);
+            }
+            else
+            {
+                _tcs.SetResult(e.Result);
+            }
         }
     }
 }
